@@ -1,13 +1,22 @@
 import numpy as np
 from scipy import sparse
 
+
 class LogisticRegression:
     def __init__(self):
         self.w = None
         self.loss_history = None
 
-    def train(self, X, y, learning_rate=1e-3, reg=1e-5, num_iters=100,
-              batch_size=200, verbose=False):
+    def train(
+        self,
+        X,
+        y,
+        learning_rate=1e-3,
+        reg=1e-5,
+        num_iters=100,
+        batch_size=200,
+        verbose=False,
+    ):
         X = LogisticRegression.append_biases(X)
         num_train, dim = X.shape
         if self.w is None:
@@ -46,7 +55,7 @@ class LogisticRegression:
             #########################################################################
 
             if verbose and it % 100 == 0:
-                print('iteration %d / %d: loss %f' % (it, num_iters, loss))
+                print("iteration %d / %d: loss %f" % (it, num_iters, loss))
 
         return self
 
@@ -72,7 +81,10 @@ class LogisticRegression:
 
         scores = X_batch.dot(self.w)
         probs = 1 / (1 + np.exp(-scores))
-        loss = -np.sum(y_batch * np.log(probs) + (1 - y_batch) * np.log(1 - probs)) / num_train
+        loss = (
+            -np.sum(y_batch * np.log(probs) + (1 - y_batch) * np.log(1 - probs))
+            / num_train
+        )
 
         dw = X_batch.T.dot(probs - y_batch) / num_train
 
